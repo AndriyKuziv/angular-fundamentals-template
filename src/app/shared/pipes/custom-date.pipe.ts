@@ -4,5 +4,14 @@ import { Pipe } from '@angular/core';
     name: 'customDate'
 })
 export class CustomDatePipe {
-    // Add your code here
+    transform(value: Date | string | number): string | null {
+        if (!value) return null;
+        const date = new Date(value);
+        
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+
+        return `${day}.${month}.${year}`;
+  }
 }
