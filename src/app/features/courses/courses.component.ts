@@ -19,4 +19,8 @@ export class CoursesComponent {
   onAdd(): void {
     this.showCourse.emit(null!);
   }
+
+  onSearch(searchValue: string): void {
+    console.log("Search:", searchValue);
+  }
 }

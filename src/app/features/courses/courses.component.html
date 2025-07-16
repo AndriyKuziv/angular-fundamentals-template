@@ -1,12 +1,8 @@
 <section class="courses-list">
   <ng-container *ngIf="courses?.length; else emptyState">
     <div class="toolbar">
-      <input
-        type="text"
-        placeholder="Input text"
-        class="search-input"
-      />
-      <app-button buttonText="Search"></app-button>
+      <app-search (search)="onSearch($event)">
+      </app-search>
       <ng-content></ng-content>
     </div>
 

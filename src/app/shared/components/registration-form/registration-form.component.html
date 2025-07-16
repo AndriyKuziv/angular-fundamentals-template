@@ -1,28 +1,43 @@
 <h2 class="text-align-center">Registration</h2>
 <div class="app-plate">
-  <div class="registration-form">
-    <div>
-      <div class="form__control">
-        <label for="name">Name</label>
-        <!--Use the name `name` for the form control.-->
-        <input type="text" id="name" placeholder="Input text"/>
-        <span id="nameErrorMessage" class="text-danger">Name is required.</span>
+  <form #registrationForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="registration-form">
+      <div>
+        <div class="form__control">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Input text"
+            required minlength="6" [(ngModel)]="name" #nameCtrl="ngModel"/>
+
+          <span id="nameErrorMessage" class="text-danger"
+            *ngIf="(registrationForm.submitted || nameCtrl.touched) && nameCtrl.errors">Name is required.</span>
+        </div>
+
+        <div class="form__control">
+          <label for="email">Email</label>
+          <input type="text" id="email" name="email" placeholder="Input text"
+            required emailValidator [(ngModel)]="email" #emailCtrl="ngModel"/>
+
+          <span id="emailErrorMessage" class="text-danger"
+            *ngIf="(registrationForm.submitted || emailCtrl.touched) && emailCtrl.errors">Email is required.</span>
+        </div>
+
+        <div class="form__control">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Input text"
+            required [(ngModel)]="password" #passwordCtrl="ngModel"/>
+
+          <span id="passwordErrorMessage" class="text-danger"
+            *ngIf="(registrationForm.submitted || passwordCtrl.touched) && passwordCtrl.errors">Password is required.</span>
+        </div>
       </div>
-      <div class="form__control">
-        <!--Use the name `email` for the form control.-->
-        <label for="email">Email</label>
-        <input type="text" id="email" placeholder="Input text"/>
-        <span id="emailErrorMessage" class="text-danger">Email is required.</span>
-      </div>
-      <div class="form__control">
-        <!--Use the name `password` for the form control.-->
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Input text"/>
-        <span id="passwordErrorMessage" class="text-danger">Password is required.</span>
+      <div>
+        <div class="form__action">
+          <app-button buttonText="REGISTER"></app-button>
+        </div>
+        <div class="form__text">
+            If you have an account you may <strong>Login</strong>
+        </div>
       </div>
     </div>
-    <div class="form__action">
-      <app-button></app-button>
-    </div>
-  </div>
+  </form>
 </div>

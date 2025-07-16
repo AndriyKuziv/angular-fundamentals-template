@@ -35,3 +35,60 @@
     cursor: pointer;
   }
 }
+
+.course__authors-columns {
+  display: flex;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.course__authors-col {
+  min-width: 220px;
+}
+
+.course__authors-col:first-child {
+  flex: 2;
+}
+
+.course__authors-col:last-child {
+  flex: 1;
+}
+
+.course__authors-list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.course__authors-empty {
+  margin-top: 8px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.course__authors-list-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.course__duration-container {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  min-width: 220px;
+  gap: 16px;
+}
+
+.course__duration {
+  font-weight: bold;
+  white-space: nowrap;
+}

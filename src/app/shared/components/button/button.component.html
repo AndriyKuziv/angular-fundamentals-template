@@ -1,6 +1,8 @@
 <div class="app-button">
-  <ng-container *ngIf="iconName">
-    <fa-icon [icon]="iconName"></fa-icon>
-  </ng-container>
-  <span *ngIf="buttonText"> {{ buttonText }} </span>
+  <button type="submit" class="app-button__native">
+    <ng-container *ngIf="iconName" class="app-button__single-icon">
+      <fa-icon [icon]="iconName"></fa-icon>
+    </ng-container>
+    <span *ngIf="buttonText"> {{ buttonText }} </span>
+  </button>
 </div>
