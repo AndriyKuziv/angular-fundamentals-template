@@ -90,7 +90,7 @@ export class CoursesService {
 
     filterCourses(value: string) {
         return this.http.get<ResponseBase>(apiConstants.baseUrl + apiConstants.coursesEndpointBase
-            + apiConstants.coursesFilterEndpoint + "?" + value)
+            + apiConstants.coursesFilterEndpoint + "?title=" + value)
         .pipe(
             map(response => {
                 console.log(response);
@@ -106,7 +106,7 @@ export class CoursesService {
 
     getAllAuthors() {
         return this.http.get<ResponseBase>(apiConstants.baseUrl + apiConstants.authorsEndpointBase
-            + apiConstants.coursesAllEndpoint)
+            + apiConstants.authorsAllEndpoint)
         .pipe(
             map(response => {
                 console.log(response);
@@ -123,7 +123,7 @@ export class CoursesService {
     createAuthor(name: string) {
         const author = { name: name };
 
-        return this.http.post<ResponseBase>(apiConstants.baseUrl + apiConstants.authorsAddEndpoint, author)
+        return this.http.post<ResponseBase>(apiConstants.baseUrl + apiConstants.authorsEndpointBase + apiConstants.authorsAddEndpoint, author)
         .pipe(
             map(response => {
                 console.log(response);
