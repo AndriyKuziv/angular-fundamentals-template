@@ -1,12 +1,19 @@
 <section class="courses-list">
-  <ng-container *ngIf="courses?.length; else emptyState">
+  <ng-container *ngIf="(courses$ | async)?.length; else emptyState">
     <div class="toolbar">
       <app-search (search)="onSearch($event)">
       </app-search>
+      <ng-container *ngIf="isAdmin$ | async">
+        <app-button buttonText="Add New Course" (click)="onAdd()"></app-button>
+      </ng-container>
       <ng-content></ng-content>
     </div>
 
-    <app-courses-list [courses]="courses" [isEditable]="isEditable">
+    <app-courses-list 
+      [courses]="courses$ | async"
+      [isEditable]="isAdmin$ | async"
+      (showCourse)="onShow($event)"
+      (editCourse)="onEdit($event)">
     </app-courses-list>
   </ng-container>
 
@@ -15,7 +22,9 @@
         title="Your list is empty"
         text="Please use 'Add New Course' button to add your first course">
         
-        <app-button buttonText="Add New Course" (click)="onAdd()"></app-button>
+        <ng-container *ngIf="isAdmin$ | async">
+          <app-button buttonText="Add New Course" (click)="onAdd()"></app-button>
+        </ng-container>
     </app-info>
   </ng-template>
 </section>

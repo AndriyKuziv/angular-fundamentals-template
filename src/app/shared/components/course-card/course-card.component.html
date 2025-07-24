@@ -16,6 +16,9 @@
             <app-button buttonText="Show course" (click)="onShow()"></app-button>
 
             <div class="course-card__buttons">
+                <app-button *ngIf="isEditable" iconName="trash-can" (click)="onDelete()"></app-button>
+                <app-button *ngIf="isEditable" iconName="pencil" (click)="onEdit()"></app-button>
+                
                 <ng-content></ng-content>
             </div>
         </div>

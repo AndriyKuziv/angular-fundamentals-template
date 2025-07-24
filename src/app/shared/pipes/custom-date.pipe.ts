@@ -1,17 +1,27 @@
 import { Pipe } from '@angular/core';
+import { parse, format } from 'date-fns';
 
 @Pipe({
     name: 'customDate'
 })
 export class CustomDatePipe {
-    transform(value: Date | string | number): string | null {
-        if (!value) return null;
-        const date = new Date(value);
+    transform(value: Date | string | undefined): string | null {
+        if (!value || typeof(value) === "undefined"){
+            return null;
+        }
         
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
+        let date: Date;
+        if (typeof(value) === "string"){
+            date = parse(value, "dd/MM/yyyy", new Date());
+        }
+        else {
+            date = new Date(value);
+        }
 
-        return `${day}.${month}.${year}`;
+        if (isNaN(date.getTime())){
+            return null;
+        }
+
+        return format(date, 'dd.MM.yyyy');
   }
 }

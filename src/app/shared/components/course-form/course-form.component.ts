@@ -1,16 +1,15 @@
+import { map } from 'rxjs/operators';
 import { Component } from '@angular/core';
 import {
   FormBuilder, FormGroup, Validators, FormArray
 } from '@angular/forms';
-import { mockedAuthorsList } from '@app/shared/mocks/mocks';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CoursesStoreService } from '@app/services/courses-store.service';
+import { Author } from '@app/shared/models/authorModels.interface';
+import { Course, CreateCourseRequest } from '@app/shared/models/courseModels.interface';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { v4 as uuidv4 } from 'uuid';
-
-interface Author {
-  id: string;
-  name: string;
-}
 
 @Component({
   selector: 'app-course-form',
@@ -18,18 +17,24 @@ interface Author {
   styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent {
-  constructor(public fb: FormBuilder, public library: FaIconLibrary) {
+  constructor(
+    public fb: FormBuilder,
+    public library: FaIconLibrary,
+    private readonly coursesStore: CoursesStoreService,
+    readonly route: ActivatedRoute,
+    readonly router: Router) {
     library.addIconPacks(fas);
   }
 
   courseForm!: FormGroup;
-  allAuthors: Author[] = mockedAuthorsList;
+  allAuthors: Author[] = [];
   courseAuthors: Author[] = [];
-  submitted = false;
+  submitted: boolean = false;
+  isEditMode: boolean = false;
+  courseId: string | null = null;
   // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
 
   ngOnInit(): void {
-    // Example initial authors
     this.courseForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(2)]],
@@ -37,12 +42,37 @@ export class CourseFormComponent {
       authors: this.fb.array([]),
       author: ['', [ Validators.minLength(2), Validators.pattern(/^[a-zA-Z0-9\s]+$/) ] ]
     });
+
+    this.coursesStore.getAllAuthors().subscribe(authors => {
+      this.allAuthors = authors;
+    });
+
+    this.route.paramMap.subscribe(params => {
+      this.courseId = params.get("id");
+      this.isEditMode = !!this.courseId;
+      if (this.isEditMode && this.courseId) {
+        this.coursesStore.getCourse(this.courseId).subscribe((course: Course | null) => {
+          if (course) {
+            this.courseForm.patchValue({
+              title: course.title,
+              description: course.description,
+              duration: course.duration
+            });
+            
+            this.courseAuthors = course.authors
+              .map((id: string) => this.allAuthors.find(a => a.id === id))
+              .filter((a): a is Author => !!a);
+            this.courseForm.setControl("authors", this.fb.array(course.authors));
+          }
+        });
+      }
+    });
   }
   
-  get title() { return this.courseForm.get('title'); }
-  get description() { return this.courseForm.get('description'); }
-  get duration() { return this.courseForm.get('duration'); }
-  get authorsArray(): FormArray { return this.courseForm.get('authors') as FormArray; }
+  get title() { return this.courseForm.get("title"); }
+  get description() { return this.courseForm.get("description"); }
+  get duration() { return this.courseForm.get("duration"); }
+  get authorsArray(): FormArray { return this.courseForm.get("authors") as FormArray; }
   get author() { return this.courseForm.get("author"); }
 
   addAuthorToCourse(author: Author) {
@@ -59,11 +89,15 @@ export class CourseFormComponent {
 
   createAuthor() {
     if (this.author?.valid) {
-      const newAuthor: Author = {
+      const newAuthor = {
         id: uuidv4(),
         name: this.author?.value
       };
-      this.allAuthors.push(newAuthor);
+      this.coursesStore.createAuthor(newAuthor.name).subscribe(author => {
+        if (author) {
+          this.allAuthors.push(author);
+        }
+      });
       this.author?.reset();
     }
   }
@@ -71,7 +105,23 @@ export class CourseFormComponent {
   onSubmit() {
     this.submitted = true;
     if (this.courseForm.valid) {
-      console.log('Course:', this.courseForm.value);
+      const courseModel = this.courseForm.value;
+      console.log(courseModel);
+      const course: CreateCourseRequest = {
+        title: courseModel.title,
+        description: courseModel.description,
+        duration: courseModel.duration,
+        authors: courseModel.authors.map((author: Author) => author.id)
+      };
+      if (this.isEditMode && this.courseId) {
+        this.coursesStore.editCourse(this.courseId, course)?.add(() => {
+          this.router.navigate(["/courses"]);
+        });
+      } else {
+        this.coursesStore.createCourse(course)?.add(() => {
+          this.router.navigate(["/courses"]);
+        });
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
   <div class="cards-container">
-    <app-course-card
+    <ng-container *ngIf="courses !== null && isEditable !== null">
+      <app-course-card
         *ngFor="let course of courses"
         [title]="course.title"
         [description]="course.description"
@@ -8,5 +9,6 @@
         [authors]="course.authors"
         [isEditable]="isEditable"
         (clickOnShow)="onShow(course)">
-    </app-course-card>
+      </app-course-card>
+    </ng-container>
   </div>

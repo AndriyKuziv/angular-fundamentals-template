@@ -1,4 +1,4 @@
-<h1 class="text-align-left">Course Create/Edit Page</h1>
+<h1 class="text-align-left">Course {{ isEditMode ? "Edit" : "Add"}} Page</h1>
 <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
   <div class="app-plate">
     <div class="course">
@@ -92,6 +92,6 @@
   </div>
 </form>
 <div class="form__action" style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 32px;">
-  <app-button buttonText="CANCEL"></app-button>
-  <app-button buttonText="CREATE COURSE"></app-button>
+  <app-button buttonText="CANCEL" (click)="router.navigate(['/courses'])"></app-button>
+  <app-button [buttonText]="isEditMode ? 'UPDATE COURSE' : 'CREATE COURSE'" (click)="onSubmit()"></app-button>
 </div>

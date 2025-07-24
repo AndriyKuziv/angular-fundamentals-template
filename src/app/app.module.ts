@@ -13,6 +13,8 @@ import { CoursesListComponent } from './features/courses/courses-list/courses-li
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { routes } from './app-routing.module';
+import { TokenInterceptor } from './auth/interceptors/token.interceptor';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, CourseInfoComponent, CoursesComponent, CoursesListComponent],
@@ -21,10 +23,14 @@ import { routes } from './app-routing.module';
     SharedModule,
     FontAwesomeModule,
     FormsModule,
+    HttpClientModule,
     RouterModule.forRoot(routes)
   ],
   exports: [RouterModule],
-  providers: [AuthorizedGuard, NotAuthorizedGuard, CoursesService, CoursesStoreService],
+  providers: [
+    AuthorizedGuard, NotAuthorizedGuard, CoursesService, CoursesStoreService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

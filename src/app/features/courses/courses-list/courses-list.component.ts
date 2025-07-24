@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { mockedAuthorsList } from '@app/shared/mocks/mocks';
+import { Course } from '@app/shared/models/courseModels.interface';
 
 @Component({
   selector: 'app-courses-list',
@@ -7,12 +7,17 @@ import { mockedAuthorsList } from '@app/shared/mocks/mocks';
   styleUrls: ['./courses-list.component.css']
 })
 export class CoursesListComponent {
-  @Input() courses: any[] = mockedAuthorsList;
-  @Input() isEditable = false;
+  @Input() courses: Course[] | null = [];
+  @Input() isEditable: boolean | null = false;
 
-  @Output() showCourse = new EventEmitter<any>();
+  @Output() showCourse = new EventEmitter<Course>();
+  @Output() editCourse = new EventEmitter<Course>();
 
-  onShow(course: any) {
+  onShow(course: Course) {
     this.showCourse.emit(course);
+  }
+
+  onEdit(course: Course) {
+    this.editCourse.emit(course);
   }
 }
