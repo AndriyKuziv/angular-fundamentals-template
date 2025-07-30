@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './auth/services/auth.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,14 +10,19 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'courses-app';
-  constructor(private auth: AuthService){}
+  isAuthorized$: Observable<boolean>;
 
-  onLogoutClick(){
-    this.auth.logout().subscribe();
-    window.location.reload();
+  constructor(private auth: AuthService, private router: Router){
+    this.isAuthorized$ = this.auth.isAuthorized$;
   }
 
-  isAuthorized(){
-    return this.auth.isAuthorised;
+  onLogoutClick(){
+    this.auth.logout().subscribe(response => {
+      window.location.reload();
+    });
+  }
+
+  onLoginClick(){
+    this.router.navigate(['/login']);
   }
 }

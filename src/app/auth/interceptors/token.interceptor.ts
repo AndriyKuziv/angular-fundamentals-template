@@ -26,6 +26,8 @@ export class TokenInterceptor implements HttpInterceptor {
             });
         }
 
+        console.log(clonedReq);
+
         return next.handle(clonedReq).pipe(
             catchError((error: HttpErrorResponse) => {
                 if (error.status === 401) {
@@ -33,6 +35,8 @@ export class TokenInterceptor implements HttpInterceptor {
                         this.router.navigate(['/login']);
                     });
                 }
+                console.log(error.message);
+
                 return throwError(() => error);
             })
         );

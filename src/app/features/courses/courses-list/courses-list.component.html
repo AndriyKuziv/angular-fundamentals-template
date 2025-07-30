@@ -8,7 +8,9 @@
         [duration]="course.duration"
         [authors]="course.authors"
         [isEditable]="isEditable"
-        (clickOnShow)="onShow(course)">
+        (clickOnShow)="onShow(course)"
+        (clickOnEdit)="onEdit(course)"
+        (clickOnDelete)="onDelete(course)">
       </app-course-card>
     </ng-container>
   </div>

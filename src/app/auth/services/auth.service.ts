@@ -35,7 +35,7 @@ export class AuthService {
     }
 
     logout() {
-        return this.http.delete(apiConstants.baseUrl + apiConstants.logoutEndpoint + "/" + this.sessionStorage.getToken()?.replace("Bearer ", ""))
+        return this.http.delete(apiConstants.baseUrl + apiConstants.logoutEndpoint)
         .pipe(
             tap(response => {
                 console.log("Logout response: ", response);
@@ -55,8 +55,6 @@ export class AuthService {
     }
 
     get isAuthorised() {
-        // const token = this.sessionStorage.getToken();
-        // return token !== null && token !== undefined && token !== "";
         return this.isAuthorized$$.value;
     }
 

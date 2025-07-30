@@ -1,10 +1,8 @@
-import { map } from 'rxjs/operators';
 import { Component } from '@angular/core';
-import {
-  FormBuilder, FormGroup, Validators, FormArray
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesStoreService } from '@app/services/courses-store.service';
+import { CoursesStateFacade } from '@app/store/courses/courses.facade';
 import { Author } from '@app/shared/models/authorModels.interface';
 import { Course, CreateCourseRequest } from '@app/shared/models/courseModels.interface';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -21,8 +19,9 @@ export class CourseFormComponent {
     public fb: FormBuilder,
     public library: FaIconLibrary,
     private readonly coursesStore: CoursesStoreService,
-    readonly route: ActivatedRoute,
-    readonly router: Router) {
+    private readonly coursesFacade: CoursesStateFacade,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router) {
     library.addIconPacks(fas);
   }
 
@@ -32,7 +31,6 @@ export class CourseFormComponent {
   submitted: boolean = false;
   isEditMode: boolean = false;
   courseId: string | null = null;
-  // Use the names `title`, `description`, `author`, 'authors' (for authors list), `duration` for the form controls.
 
   ngOnInit(): void {
     this.courseForm = this.fb.group({
@@ -45,13 +43,13 @@ export class CourseFormComponent {
 
     this.coursesStore.getAllAuthors().subscribe(authors => {
       this.allAuthors = authors;
-    });
 
-    this.route.paramMap.subscribe(params => {
+      this.route.paramMap.subscribe(params => {
       this.courseId = params.get("id");
       this.isEditMode = !!this.courseId;
       if (this.isEditMode && this.courseId) {
-        this.coursesStore.getCourse(this.courseId).subscribe((course: Course | null) => {
+        this.coursesFacade.getSingleCourse(this.courseId);
+        this.coursesFacade.course$.subscribe((course: Course | null) => {
           if (course) {
             this.courseForm.patchValue({
               title: course.title,
@@ -62,18 +60,42 @@ export class CourseFormComponent {
             this.courseAuthors = course.authors
               .map((id: string) => this.allAuthors.find(a => a.id === id))
               .filter((a): a is Author => !!a);
-            this.courseForm.setControl("authors", this.fb.array(course.authors));
+
+            this.allAuthors = this.allAuthors.filter(
+              a => !course.authors.includes(a.id)
+            );
+            
+            const authorsFormArray = this.fb.array(
+              this.courseAuthors.map(author => this.fb.control({ id: author.id, name: author.name }))
+            );
+
+            this.courseForm.setControl("authors", authorsFormArray);
           }
         });
       }
     });
+    });
   }
   
-  get title() { return this.courseForm.get("title"); }
-  get description() { return this.courseForm.get("description"); }
-  get duration() { return this.courseForm.get("duration"); }
-  get authorsArray(): FormArray { return this.courseForm.get("authors") as FormArray; }
-  get author() { return this.courseForm.get("author"); }
+  get title() {
+    return this.courseForm.get("title");
+  }
+
+  get description() {
+    return this.courseForm.get("description");
+  }
+
+  get duration() {
+    return this.courseForm.get("duration");
+  }
+
+  get authorsArray(): FormArray {
+    return this.courseForm.get("authors") as FormArray;
+  }
+
+  get author() {
+    return this.courseForm.get("author");
+  }
 
   addAuthorToCourse(author: Author) {
     this.courseAuthors.push(author);
@@ -106,22 +128,24 @@ export class CourseFormComponent {
     this.submitted = true;
     if (this.courseForm.valid) {
       const courseModel = this.courseForm.value;
-      console.log(courseModel);
+
       const course: CreateCourseRequest = {
         title: courseModel.title,
         description: courseModel.description,
         duration: courseModel.duration,
         authors: courseModel.authors.map((author: Author) => author.id)
       };
+
       if (this.isEditMode && this.courseId) {
-        this.coursesStore.editCourse(this.courseId, course)?.add(() => {
-          this.router.navigate(["/courses"]);
-        });
-      } else {
-        this.coursesStore.createCourse(course)?.add(() => {
-          this.router.navigate(["/courses"]);
-        });
+        this.coursesFacade.editCourse(this.courseId, course);
+      }
+      else {
+        this.coursesFacade.createCourse(course);
       }
     }
+  }
+
+  onCancelClick(){
+    this.router.navigate(["/courses"]);
   }
 }

@@ -13,7 +13,8 @@
       [courses]="courses$ | async"
       [isEditable]="isAdmin$ | async"
       (showCourse)="onShow($event)"
-      (editCourse)="onEdit($event)">
+      (editCourse)="onEdit($event)"
+      (deleteCourse)="onDelete($event)">
     </app-courses-list>
   </ng-container>
 

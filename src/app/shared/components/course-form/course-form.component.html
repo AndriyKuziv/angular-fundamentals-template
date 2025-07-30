@@ -92,6 +92,6 @@
   </div>
 </form>
 <div class="form__action" style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 32px;">
-  <app-button buttonText="CANCEL" (click)="router.navigate(['/courses'])"></app-button>
+  <app-button buttonText="CANCEL" (click)="onCancelClick()"></app-button>
   <app-button [buttonText]="isEditMode ? 'UPDATE COURSE' : 'CREATE COURSE'" (click)="onSubmit()"></app-button>
 </div>

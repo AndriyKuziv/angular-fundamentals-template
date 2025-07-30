@@ -1,5 +1,8 @@
 <app-header>
-  <app-button buttonText="LOGOUT" (click)="onLogoutClick()"></app-button>
+  <app-button *ngIf="isAuthorized$; else loginBtn" buttonText="LOGOUT" (click)="onLogoutClick()"></app-button>
+  <ng-template #loginBtn>
+    <app-button buttonText="LOGIN" (click)="onLoginClick()"></app-button>
+  </ng-template>
 </app-header>
 <div class="app-root">
   <router-outlet></router-outlet>

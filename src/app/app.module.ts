@@ -15,6 +15,9 @@ import { RouterModule } from '@angular/router';
 import { routes } from './app-routing.module';
 import { TokenInterceptor } from './auth/interceptors/token.interceptor';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
+import { effects, reducers } from './store';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [AppComponent, CourseInfoComponent, CoursesComponent, CoursesListComponent],
@@ -24,7 +27,9 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
     FontAwesomeModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot(effects)
   ],
   exports: [RouterModule],
   providers: [

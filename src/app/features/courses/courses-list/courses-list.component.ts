@@ -12,6 +12,7 @@ export class CoursesListComponent {
 
   @Output() showCourse = new EventEmitter<Course>();
   @Output() editCourse = new EventEmitter<Course>();
+  @Output() deleteCourse = new EventEmitter<Course>();
 
   onShow(course: Course) {
     this.showCourse.emit(course);
@@ -19,5 +20,9 @@ export class CoursesListComponent {
 
   onEdit(course: Course) {
     this.editCourse.emit(course);
+  }
+
+  onDelete(course: Course){
+    this.deleteCourse.emit(course);
   }
 }
