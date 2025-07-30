@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CoursesComponent } from './courses.component';
+import { CoursesStateFacade } from '@app/store/courses/courses.facade';
+import { StoreModule } from '@ngrx/store';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('CoursesComponent', () => {
   let component: CoursesComponent;
@@ -8,7 +10,9 @@ describe('CoursesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CoursesComponent ]
+      declarations: [ CoursesComponent ],
+      imports: [StoreModule.forRoot({}), HttpClientModule],
+			providers: [CoursesStateFacade]
     })
     .compileComponents();
 
