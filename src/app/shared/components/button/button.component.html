@@ -1,7 +1,7 @@
 <div class="app-button">
   <button type="submit" class="app-button__native">
     <ng-container *ngIf="iconName" class="app-button__single-icon">
-      <fa-icon [icon]="iconName"></fa-icon>
+      <fa-icon [icon]="iconName" size="lg"></fa-icon>
     </ng-container>
     <span *ngIf="buttonText"> {{ buttonText }} </span>
   </button>

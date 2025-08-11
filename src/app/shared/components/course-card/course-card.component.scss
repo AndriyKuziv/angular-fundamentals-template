@@ -31,4 +31,9 @@
       margin-top: 16px;
     }
   }
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+  }
 }

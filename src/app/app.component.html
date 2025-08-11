@@ -1,30 +1,10 @@
 <app-header>
-  <app-button *ngIf="isAuthorized$; else loginBtn" buttonText="LOGOUT" (click)="onLogoutClick()"></app-button>
+  <h3>{{ (userName$ | async) === null ? "" : userName$ | async}}</h3>
+  <app-button *ngIf="isAuthorized$ | async; else loginBtn" buttonText="LOGOUT" (click)="onLogoutClick()"></app-button>
   <ng-template #loginBtn>
     <app-button buttonText="LOGIN" (click)="onLoginClick()"></app-button>
   </ng-template>
 </app-header>
 <div class="app-root">
   <router-outlet></router-outlet>
-
-  <!-- Search component -->
-  <!--<app-search></app-search>-->
-
-  <!-- Info component -->
-  <!--<app-info></app-info>-->
-
-  <!-- Course Card component -->
-  <!--<app-course-card></app-course-card>-->
-
-  <!-- Login Form component -->
-  <!--<app-login-form></app-login-form>-->
-
-  <!-- Login Form component -->
-  <!--<app-registration-form></app-registration-form>-->
-
-  <!-- Login Form component -->
-  <!--<app-course-form></app-course-form>-->
-
-  <!-- Modal component -->
-  <!-- <app-modal [message]="'Message'" [title]="'Title'" [okButtonText]="'Ok'" [cancelButtonText]="'Cancel'"></app-modal> -->
 </div>

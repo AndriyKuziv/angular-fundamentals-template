@@ -20,7 +20,7 @@ import { effects, reducers } from './store';
 import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
-  declarations: [AppComponent, CourseInfoComponent, CoursesComponent, CoursesListComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     SharedModule,

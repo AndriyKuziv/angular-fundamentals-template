@@ -23,10 +23,10 @@
       </div>
       <div>
         <div class="form__action">
-          <app-button buttonText="LOGIN"></app-button>
+          <app-button type="submit" buttonText="LOGIN"></app-button>
         </div>
         <div class="form__text">
-          If you don't have an account you may <strong>Registration</strong>
+          If you don't have an account you may <a [routerLink]="['/register']" routerLinkActive="router-link-active"><strong>Register</strong></a>
         </div>
       </div>
     </div>

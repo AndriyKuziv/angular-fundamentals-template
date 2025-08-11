@@ -8,9 +8,9 @@
         [duration]="course.duration"
         [authors]="course.authors"
         [isEditable]="isEditable"
-        (clickOnShow)="onShow(course)"
-        (clickOnEdit)="onEdit(course)"
-        (clickOnDelete)="onDelete(course)">
+        (clickOnShow)="onShow(course)">
+          <app-button *ngIf="isEditable" iconName="trash-can" (click)="onDelete(course)"></app-button>
+          <app-button *ngIf="isEditable" iconName="pencil" (click)="onEdit(course)"></app-button>
       </app-course-card>
     </ng-container>
   </div>

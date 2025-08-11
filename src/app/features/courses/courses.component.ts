@@ -3,7 +3,10 @@ import { Router } from '@angular/router';
 import { CoursesStateFacade } from '@app/store/courses/courses.facade';
 import { Course } from '@app/shared/models/courseModels.interface';
 import { UserStoreService } from '@app/user/services/user-store.service';
-import { Observable } from 'rxjs';
+import { CoursesStoreService } from '@app/services/courses-store.service';
+import { Author } from '@app/shared/models/authorModels.interface';
+import { map } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-courses',
@@ -17,15 +20,26 @@ export class CoursesComponent implements OnInit {
   constructor(
     private readonly coursesFacade: CoursesStateFacade,
     private readonly userStore: UserStoreService,
+    private readonly coursesStore: CoursesStoreService,
     private readonly router: Router
   ) {
-    this.courses$ = this.coursesFacade.courses$;
+    this.courses$ = combineLatest([
+      this.coursesFacade.courses$,
+      this.coursesStore.getAllAuthors()
+    ]).pipe(
+      map(([courses, authors]) =>
+        courses.map(course => ({
+          ...course,
+          authors: course.authors
+            .map(authorId => authors.find(a => a.id === authorId)?.name || authorId)
+        }))
+      )
+    );
     this.isAdmin$ = this.userStore.isAdmin$;
   }
 
   ngOnInit(): void {
     this.coursesFacade.getAllCourses();
-    this.userStore.getUser().subscribe();
   }
 
   onShow(course: Course): void {
@@ -37,7 +51,7 @@ export class CoursesComponent implements OnInit {
   }
 
   onDelete(course: Course): void {
-    console.warn(`Clicked course '${course.title}' for deletion.`);
+    this.coursesFacade.deleteCourse(course.id);
   }
 
   onAdd(): void {

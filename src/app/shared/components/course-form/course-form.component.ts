@@ -97,19 +97,19 @@ export class CourseFormComponent {
     return this.courseForm.get("author");
   }
 
-  addAuthorToCourse(author: Author) {
+  addAuthorToCourse(author: Author): void {
     this.courseAuthors.push(author);
     this.allAuthors = this.allAuthors.filter(a => a.id !== author.id);
     this.authorsArray.push(this.fb.control({ id: author.id, name: author.name }));
   }
 
-  removeAuthorFromCourse(author: Author, index: number) {
+  removeAuthorFromCourse(author: Author, index: number): void {
     this.allAuthors.push(author);
     this.courseAuthors = this.courseAuthors.filter(a => a.id !== author.id);
     this.authorsArray.removeAt(index);
   }
 
-  createAuthor() {
+  createAuthor(): void {
     if (this.author?.valid) {
       const newAuthor = {
         id: uuidv4(),
@@ -124,7 +124,7 @@ export class CourseFormComponent {
     }
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.submitted = true;
     if (this.courseForm.valid) {
       const courseModel = this.courseForm.value;
@@ -145,7 +145,7 @@ export class CourseFormComponent {
     }
   }
 
-  onCancelClick(){
+  onCancelClick(): void {
     this.router.navigate(["/courses"]);
   }
 }

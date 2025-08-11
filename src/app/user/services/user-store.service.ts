@@ -20,7 +20,7 @@ export class UserStoreService {
         return this.userService.getUser().pipe(
             tap((user: User | null) => {
                 if (user) {
-                    this.name$$.next(user.name);
+                    this.name$$.next(user.name ?? user.email);
                     this.isAdmin$$.next(user.role === "admin");
                 } else {
                     this.name$$.next(null);

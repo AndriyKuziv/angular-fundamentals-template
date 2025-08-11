@@ -9,10 +9,10 @@ import { Router } from '@angular/router';
 @Injectable()
 export class CoursesEffects {
     constructor(
-        private actions$: Actions,
-        private coursesService: CoursesService,
-        private coursesStateFacade: CoursesStateFacade,
-        private router: Router
+        private readonly actions$: Actions,
+        private readonly coursesService: CoursesService,
+        private readonly coursesStateFacade: CoursesStateFacade,
+        private readonly router: Router
     ) {}
 
     getAll$ = createEffect(() =>
@@ -36,6 +36,7 @@ export class CoursesEffects {
                 const courses = allCourses.filter(course =>
                     course.title.toLowerCase().includes(searchValue)
                 );
+
                 return CoursesActions.requestFilteredCoursesSuccess({ courses });
             })
         )
@@ -49,8 +50,9 @@ export class CoursesEffects {
                     map(course => {
                         if (course) {
                             return CoursesActions.requestSingleCourseSuccess({ course });
-                        } else {
-                            return CoursesActions.requestSingleCourseFail({ error: 'Course not found' });
+                        }
+                        else {
+                            return CoursesActions.requestSingleCourseFail({ error: "Course was not found" });
                         }
                     }),
                     catchError(error => of(CoursesActions.requestSingleCourseFail({ error })))
@@ -79,8 +81,9 @@ export class CoursesEffects {
                     map(course => {
                         if (course) {
                             return CoursesActions.requestEditCourseSuccess({ course });
-                        } else {
-                            return CoursesActions.requestEditCourseFail({ error: 'Edit failed' });
+                        }
+                        else {
+                            return CoursesActions.requestEditCourseFail({ error: "Course edit failed" });
                         }
                     }),
                     catchError(error => of(CoursesActions.requestEditCourseFail({ error })))
@@ -98,7 +101,7 @@ export class CoursesEffects {
                         if (course) {
                             return CoursesActions.requestCreateCourseSuccess({ course });
                         } else {
-                            return CoursesActions.requestCreateCourseFail({ error: 'Create failed' });
+                            return CoursesActions.requestCreateCourseFail({ error: "Course creation failed" });
                         }
                     }),
                     catchError(error => of(CoursesActions.requestCreateCourseFail({ error })))
@@ -116,7 +119,7 @@ export class CoursesEffects {
                     CoursesActions.requestSingleCourseFail
                 ),
                 tap(() => {
-                    this.router.navigate(['/courses']);
+                    this.router.navigate(["/courses"]);
                 })
             ),
         { dispatch: false }

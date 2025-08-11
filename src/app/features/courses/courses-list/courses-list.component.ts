@@ -14,15 +14,15 @@ export class CoursesListComponent {
   @Output() editCourse = new EventEmitter<Course>();
   @Output() deleteCourse = new EventEmitter<Course>();
 
-  onShow(course: Course) {
+  onShow(course: Course): void {
     this.showCourse.emit(course);
   }
 
-  onEdit(course: Course) {
+  onEdit(course: Course): void {
     this.editCourse.emit(course);
   }
 
-  onDelete(course: Course){
+  onDelete(course: Course): void{
     this.deleteCourse.emit(course);
   }
 }

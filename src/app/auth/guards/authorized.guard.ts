@@ -6,13 +6,13 @@ import { AuthService } from '../services/auth.service';
     providedIn: 'root'
 })
 export class AuthorizedGuard implements CanLoad {
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
     canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree {
         if (this.authService.isAuthorised) {
             return true;
         }
 
-        return this.router.parseUrl('/login');
+        return this.router.parseUrl("/login");
     }
 }

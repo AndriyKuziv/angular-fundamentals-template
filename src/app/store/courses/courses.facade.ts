@@ -16,7 +16,7 @@ export class CoursesStateFacade {
     public course$ = this.store.select(CoursesSelectors.getCourse);
     public errorMessage$ = this.store.select(CoursesSelectors.getErrorMessage);
 
-    constructor(private store: Store) {}
+    constructor(private readonly store: Store) {}
 
     getAllCourses() {
         this.store.dispatch(CoursesActions.requestAllCourses());

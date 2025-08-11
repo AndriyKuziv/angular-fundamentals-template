@@ -12,7 +12,7 @@ import { Course, CreateCourseRequest, UpdateCourseRequest } from '@app/shared/mo
 export class CoursesService {
     constructor(private readonly http: HttpClient) {}
 
-    getAll(){
+    getAll() {
         return this.http.get<ResponseBase>(apiConstants.baseUrl + apiConstants.coursesEndpointBase
             + apiConstants.coursesAllEndpoint)
         .pipe(

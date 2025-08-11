@@ -14,12 +14,12 @@ export class AuthService {
     private isAuthorized$$ = new BehaviorSubject<boolean>(false);
     public isAuthorized$: Observable<boolean> = this.isAuthorized$$.asObservable();
 
-    private userName = new BehaviorSubject<string>("");
-
     constructor(
         private readonly http: HttpClient,
         private readonly sessionStorage: SessionStorageService
-    ) {}
+    ) {
+        this.isAuthorized$$.next(this.sessionStorage.getToken() !== null);
+    }
 
     login(user: LoginUser) {
         return this.http.post<ResponseBase>(apiConstants.baseUrl + apiConstants.loginEndpoint, user)
@@ -46,7 +46,7 @@ export class AuthService {
     }
 
     register(user: RegisterUser) {
-        return this.http.post(apiConstants.baseUrl + apiConstants.registerEndpoint, user)
+        return this.http.post<ResponseBase>(apiConstants.baseUrl + apiConstants.registerEndpoint, user)
         .pipe(
             tap(response => {
                 console.log("Register response: ",response);
